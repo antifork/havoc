@@ -1,0 +1,62 @@
+#
+#  $Id$
+#
+#  Copyright (c) 2000 raptor <raptor@antifork.org>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+#
+
+CC      = @CC@ 
+CFLAGS  = @CFLAGS@ -Wall -Wstrict-prototypes -pipe  
+LDFLAGS = @LDFLAGS@ 
+LIBS    = @LIBS@
+DEFS    = @DEFS@
+INSTALL = @INSTALL@ 
+
+prefix      = @prefix@
+exec_prefix = @exec_prefix@
+bindir      = @bindir@
+mandir      = @mandir@
+datadir     = @datadir@
+
+OBJS    = main.o if.o rand.o usage.o   
+
+all :havoc 
+.c.o:
+	$(CC) $(CFLAGS) $(ADEFS) -c $< -o $@ 
+
+havoc:  version.h $(OBJS)
+	$(CC) -o havoc $(OBJS) $(LIBS) 	
+	@echo "Done."
+
+version.o: version.h
+version.h: ./VERSION
+	@rm -f $@
+	@sed -e 's/.*/#define VERSION "&"/' ./VERSION > $@
+	@./config.guess | sed -e 's/.*/#define CPU_MFR_OPSYS "&"/' >> $@ 	
+	@cat INFO | cut -f 2 -d ' ' | sed -e 's/.*/#define AUTHOR "&"/' >> $@
+	@cat INFO | cut -f 3 -d ' ' | sed -e 's/.*/#define MAIL_SUPPORT "&"/' >> $@
+	@./header
+
+install:
+	$(INSTALL) -c -m 0755 -g bin havoc $(bindir)
+	$(INSTALL) -c -m 0644 havoc.1 $(mandir)/man1
+
+	@echo "Done."
+clean:
+	rm -f *~ havoc *.o 
+distclean:
+	rm -f *~ havoc *.cache *.log *.o Makefile config.h version.h

@@ -1,0 +1,10 @@
+$Id$
+
+HAVOC is a random ARP traffic generator: in other words, executing it will
+temporarily hose your ethernet segment, so be careful when testing. It's for 
+demonstrative and BOFH purposes only and no warranty is provided with it.
+Remember that you must be root to use HAVOC.
+
+See the COPYING file for details on GNU General Public License (GPL).
+
+See INSTALL for explanation on installation process.

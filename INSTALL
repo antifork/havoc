@@ -1,0 +1,12 @@
+$Id$
+
+To install HAVOC just execute:
+
+./configure
+make
+
+Then su to root and type:
+
+make install
+
+HAVOC currently works on Linux and *BSD. See README for more informations.
